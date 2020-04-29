@@ -7,7 +7,212 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+:root{
+  --border-size: 3px;
+  --main-background-color: rgb(241, 44, 44);
+  --ligth-background-color: lightcoral;
+}
+
+.button-add{
+  font-size: 2.7em;
+  transform: rotate(45deg);
+}
+
+.button-delete{
+  background-color: azure;
+  border-left: 3px solid black;
+  cursor: pointer;
+  display: inline;
+  height: 100%;
+  width: 30px;
+  box-sizing: border-box;
+  padding: 7px;
+  position: absolute;
+  right: 0;
+  bottom: 0px;
+}
+
+.button-delete > svg{
+  position: absolute;
+  bottom: 10px;
+  right: 5px;
+}
+
+.button-small {
+  position: absolute;
+  right: 5px; 
+  cursor: pointer;
+}
+
+.container {
+  column-count: 5;
+  /* column-gap: 30px; */
+  width: 100%;
+  margin: 1em;
+}
+
+.group{
+  margin-top: 1em;
+  width: 95%;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.group-body{
+  /* max-height: 30vh; */
+  border: var(--border-size) solid black;
+}
+
+.group-header {
+  background-color: var(--main-background-color);
+  box-sizing: border-box;
+  text-transform: uppercase;
+  position: relative;
+  padding: 10px 10px;
+  border-top: var(--border-size) solid black;
+  border-left: var(--border-size) solid black;
+  border-right: var(--border-size) solid black;
+  border-radius: 10px 10px 0px 0px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.group-header > span{
+  font-size: 1em;
+  width: 80%;
+}
+
+.group-new{
+  border:  var(--border-size) solid black; 
+  border-radius: 10px;
+  max-height: 6em;
+  max-width: 6em;
+  margin-top: 2.5vh;
+  margin-left: 2.5vh;
+  background-color: var(--main-background-color);
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+}
+
+
+.hide{
+  visibility: hidden;
+}
+
+.todo-item{
+  padding: 7px 0px 7px 3px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: lightpink;
+}
+
+.todo-item:hover{
+  background-color: var(--main-background-color);
+  filter: blur(0px);
+  transition: 0.3s;
+}
+
+.todo-item > div{
+  width: 80%;
+  text-transform: capitalize;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  margin-left: 15px;
+  font-size: 1em;
+}
+
+.todo-item input {
+  visibility: hidden;
+  cursor: pointer;
+}
+
+.todo-item input ~ .check:hover{
+  background-color: #bbb;
+}
+
+.todo-item input:checked ~ .check:after {
+  display: block;
+}
+
+.todo-item .check:after {
+  background-color: #2196F3;
+}
+
+.check:after {
+  content: "";
+  position: absolute;
+  display: none;
+  border-radius: 20px;
+  top: 0px;
+  left: 0px;
+  height: 15px;
+  width: 15px;
+}
+
+.check {
+  position: absolute;
+  top: 8px;
+  left: 7px;
+  height: 15px;
+  width: 15px;
+  border-radius: 20px;
+  border: 3px solid #eee;
+  background-color: #eee;
+}
+
+.todo-item.disabled{
+  background-color: rgba(100, 100, 100, 0.4);
+  filter: blur(1px);
+  transition: 0.3s;
+  border:0 solid white;
+}
+
+.todo-item:last-child{
+  background-color: rgba(100, 100, 100, 0.4);
+}
+
+.todo-item:last-child > div{
+  text-align: center;
+  font-weight: bold;
+  margin:auto;
+  width: 80%;
+  height: 80%;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 3px 3px black;
+  transition: 0.4s;
+}
+
+div[contenteditable="true"]:focus{
+  outline: 0px solid transparent;
+}
+
+.todo-item:last-child> div[contenteditable="true"]:focus{
+  font-weight: 100;
+  transition: 0.4s;
+  box-shadow: 1px 1px gray;
+}
+
+@media screen and (max-width: 1400px) {
+  .container {
+   column-count: 4;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .container {
+   column-count: 3;
+  }
+}
+@media screen and (max-width: 700px) {
+  .container {
+    column-count: 1;
+  }
 }
