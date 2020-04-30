@@ -1,6 +1,5 @@
 import React, { Component, createRef } from 'react';
 import { FaTimes as RemoveIcon } from 'react-icons/fa';
-// import ContentEditable from 'react-contenteditable';
 
 class TodoItem extends Component {
   constructor(props){
@@ -85,7 +84,7 @@ class TodoItem extends Component {
   }
   
   handleUpdate = (e) => {
-    const newName = e.currentTarget.textContent;
+    const newName = e.currentTarget.value.trim();
     this.setState((prevState)=>(
       {...prevState, 
         todo:{...prevState.todo, name:newName},

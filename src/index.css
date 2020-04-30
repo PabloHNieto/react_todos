@@ -107,6 +107,29 @@ input:focus{
   cursor: pointer;
 }
 
+.group:last-child >.group-body{
+  background-color: #ccc;
+  border-style: dashed;
+}
+
+.group:last-child >.group-body>.todo-item{
+  background-color: #eee;
+}
+
+.group:last-child >.group-body>.todo-item:last-child{
+  background-color: #ccc;
+}
+
+.group:last-child >.group-header>.button-delete{
+  visibility: hidden;
+}
+
+.group:last-child >.group-header{
+  background-color: #ccc;
+  border-bottom: 0px;
+  border-style: dashed;
+}
+
 .hide{
   visibility: hidden;
 }

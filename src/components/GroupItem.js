@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { FaTrash as MoreActions } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
-// import ContentEditable from 'react-contenteditable';
+import { sortableElement } from 'react-sortable-hoc';
 import TodoItem from "./TodoItem";
 
 class GroupItem extends Component {
   constructor(props){
     super(props);
     this.state = {autofocus:false,
+      idx: this.props.index,
       sortBy: this.props.sortBy,
       sortType: "asc",
       group: props.group};
@@ -17,15 +18,20 @@ class GroupItem extends Component {
     this.onTitleChange = this.onTitleChange.bind(this);
     this.detectIntros = this.detectIntros.bind(this);
     this.highlightAll = this.highlightAll.bind(this);
+    this.onDragStart = this.onDragStart.bind(this);
+    this.onDrop = this.onDrop.bind(this);
   }
 
-  componentDidUpdate(_, prevState){
+  componentDidUpdate(prevProps, prevState){
     //Only update if there are changes
-    if (JSON.stringify(prevState) !== JSON.stringify(this.state)){
+    if (JSON.stringify(prevState.group) !== JSON.stringify(this.state.group)){
       this.props.storeData(this.state.group)
     }
     if (this.props.group._id !== prevState.group._id){
       this.setState({group: this.props.group});
+    }
+    if (this.props.index !== this.state.idx){
+      this.setState({idx: this.props.index});
     }
   }
 
@@ -79,7 +85,7 @@ class GroupItem extends Component {
   }
 
   onTitleChange = (e) => {
-    const newTitle = e.currentTarget.textContent.trim();
+    const newTitle = e.currentTarget.value.trim();
     if (newTitle.toLowerCase() !== "placeholder" 
       & newTitle !== null  
       & newTitle.toLowerCase() !== this.state.group.title
@@ -101,19 +107,33 @@ class GroupItem extends Component {
       document.execCommand('selectAll', false, null)
     }, 0)
   }
+  onDragStart = (e) => {
+    console.log("DragStart", this.state.group.title, this.state.idx)
+    e.dataTransfer.setData("idx", this.state.idx);
+  }
+
+  onDrop = (e) => {
+    e.preventDefault();
+    this.props.onDrop(parseInt(e.dataTransfer.getData("idx")), this.state.idx)
+  }
 
   render() {
     return (
       <div className="group" 
+        draggable
+        onDragStart={this.onDragStart} 
+        onDrop={this.onDrop}
+        onDragOver={e => e.preventDefault()}
         onFocus={this.props.onFocus}
         onBlur={this.props.onBlur}>
         <div className="group-header">
+          <span>Drag</span>
           <input
             type="text" 
             onFocus={this.highlightAll}
-            onBlur={this.onTitleChange} 
+            onChange={this.onTitleChange} 
             onKeyDown={this.detectIntros}
-            defaultValue={this.state.group.title}/>
+            value={this.state.group.title}/>
           <div className="button-delete" onClick={this.onArchive}>
             <MoreActions />
           </div> 
@@ -142,5 +162,6 @@ class GroupItem extends Component {
     );
   }
 }
-
-export default GroupItem;
+const SortableItem = sortableElement((props) => <><GroupItem {...props}/></>);
+// export default GroupItem;
+export {GroupItem, SortableItem};

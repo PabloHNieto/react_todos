@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import GroupItem from './GroupItem';
-// import { FaTimesCircle as AddNewTaskIcon } from 'react-icons/fa';
+import {GroupItem, SortableItem} from './GroupItem';
 import {dummy_data, gen_dummy_group} from '../utils/dummy_data';
-import { DndProvider } from 'react-dnd'
-import Backend from 'react-dnd-html5-backend'
 
 class TaskList extends Component {
   
@@ -14,6 +11,7 @@ class TaskList extends Component {
     this.storeData = this.storeData.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.storeTmpData = this.storeTmpData.bind(this);
+    this.onSortEnd = this.onSortEnd.bind(this);
     this.storage = {dev: "envWorkingHardOnTodos",
                     prod: "workingHardOnTodos"}
     this.storeType = process.env.REACT_APP_STAGE;
@@ -62,6 +60,19 @@ class TaskList extends Component {
     this.setState({tmpData:gen_dummy_group(), group: newGroup})
   }
 
+  onSortEnd = (oldIndex, newIndex) => {
+
+    if (oldIndex === newIndex) return null
+
+    let newGroup2 = this.state.group.slice()
+      .filter((e) => e.status > 0);
+
+    let newGroup = newGroup2.slice();
+    newGroup.splice(oldIndex, 1)
+    newGroup.splice(newIndex, 0, newGroup2[oldIndex])
+    this.setState({group: newGroup})
+  }
+
   onFocus() {
     clearTimeout(this.timeOutId);
   }
@@ -70,18 +81,19 @@ class TaskList extends Component {
     return (
       <div className="container">
         {this.state.loading && <div>Loading</div>} 
-        <DndProvider backend={Backend}>
         {!this.state.loading && 
-        this.state.group.filter((e) => e.status > 0)
-        .map((e)=>(
-          <GroupItem key={e._id} 
-            sortBy="createdAt"
-            showChecked={true}
-            storeData={this.storeData}
-            group={e}/>
-        ))
+          this.state.group.filter((e) => e.status > 0)
+          .map((e, idx)=>(
+            <GroupItem 
+              onDrop={this.onSortEnd}
+              index={idx}
+              key={e._id} 
+              sortBy="createdAt"
+              showChecked={true}
+              storeData={this.storeData}
+              group={e}/>
+          ))
         }
-        </DndProvider>
         <GroupItem key="newTask"
           onBlur={this.addNewTaskGroup} 
           onFocus={this.onFocus}
