@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import GroupItem from './GroupItem';
 // import { FaTimesCircle as AddNewTaskIcon } from 'react-icons/fa';
 import {dummy_data, gen_dummy_group} from '../utils/dummy_data';
+import { DndProvider } from 'react-dnd'
+import Backend from 'react-dnd-html5-backend'
+
 class TaskList extends Component {
   
   constructor(props){
@@ -67,7 +70,7 @@ class TaskList extends Component {
     return (
       <div className="container">
         {this.state.loading && <div>Loading</div>} 
-
+        <DndProvider backend={Backend}>
         {!this.state.loading && 
         this.state.group.filter((e) => e.status > 0)
         .map((e)=>(
@@ -78,6 +81,7 @@ class TaskList extends Component {
             group={e}/>
         ))
         }
+        </DndProvider>
         <GroupItem key="newTask"
           onBlur={this.addNewTaskGroup} 
           onFocus={this.onFocus}

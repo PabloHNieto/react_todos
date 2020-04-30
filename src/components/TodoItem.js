@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import { FaTimes as RemoveIcon } from 'react-icons/fa';
-import ContentEditable from 'react-contenteditable';
+// import ContentEditable from 'react-contenteditable';
 
 class TodoItem extends Component {
   constructor(props){
@@ -110,17 +110,17 @@ class TodoItem extends Component {
             />  
           <span className="check"></span>
         </label>
-         <ContentEditable
+        <input
           className="todo-content"
-          innerRef={this.mainRef}
+          ref={this.mainRef}
           onKeyDown={this.detectIntros}
           onFocus={this.highlightAll}
           onChange={this.handleUpdate}
           reset={this.props.reset}
           onBlur={this.onChangeInfo}
-          html={this.state.todo.name}
+          value={this.state.todo.name}
           disabled={this.state.todo.completed}
-          tagName="div"/>
+          type="text" />
         { (showDelete && !this.state.todo.completed) &&
           <RemoveIcon  
           onClick={this.removeTask}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FaTrash as MoreActions } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
-import ContentEditable from 'react-contenteditable';
+// import ContentEditable from 'react-contenteditable';
 import TodoItem from "./TodoItem";
 
 class GroupItem extends Component {
@@ -108,12 +108,12 @@ class GroupItem extends Component {
         onFocus={this.props.onFocus}
         onBlur={this.props.onBlur}>
         <div className="group-header">
-          <ContentEditable 
+          <input
+            type="text" 
             onFocus={this.highlightAll}
             onBlur={this.onTitleChange} 
             onKeyDown={this.detectIntros}
-            html={this.state.group.title} 
-            tagName="div"/>
+            defaultValue={this.state.group.title}/>
           <div className="button-delete" onClick={this.onArchive}>
             <MoreActions />
           </div> 
