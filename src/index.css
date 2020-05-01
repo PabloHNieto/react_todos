@@ -10,6 +10,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 input{
+  resize: none;
+  overflow:hidden;
   border-width: 0;
   background-color: transparent;
 }
@@ -153,7 +155,7 @@ input:focus{
   background-color: transparent;
   border-width: 0;
   text-transform: capitalize;
-  white-space: nowrap; 
+  white-space: wrap; 
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;

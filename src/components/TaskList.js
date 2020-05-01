@@ -70,7 +70,10 @@ class TaskList extends Component {
     let newGroup = newGroup2.slice();
     newGroup.splice(oldIndex, 1)
     newGroup.splice(newIndex, 0, newGroup2[oldIndex])
-    this.setState({group: newGroup})
+    this.setState({group: newGroup});
+
+    const stringNewState = JSON.stringify({group: newGroup});
+    localStorage.setItem(this.storeLocation, stringNewState);
   }
 
   onFocus() {

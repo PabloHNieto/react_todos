@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { FaTrash as MoreActions } from 'react-icons/fa';
+import { FaEllipsisV as DragIcon } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 import TodoItem from "./TodoItem";
 
@@ -126,9 +127,10 @@ class GroupItem extends Component {
         onFocus={this.props.onFocus}
         onBlur={this.props.onBlur}>
         <div className="group-header">
-          <span>Drag</span>
+          <DragIcon/>
           <input
             type="text" 
+            onDragStart={e => e.preventDefault()}
             onFocus={this.highlightAll}
             onChange={this.onTitleChange} 
             onKeyDown={this.detectIntros}

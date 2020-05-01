@@ -112,6 +112,7 @@ class TodoItem extends Component {
         <input
           className="todo-content"
           ref={this.mainRef}
+          onDragStart={e => e.preventDefault()}
           onKeyDown={this.detectIntros}
           onFocus={this.highlightAll}
           onChange={this.handleUpdate}
