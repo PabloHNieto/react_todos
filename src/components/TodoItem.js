@@ -7,13 +7,13 @@ class TodoItem extends Component {
     this.state = { showDelete:false, todo: props.todo};
     this.mainRef = createRef();
     this.tmpData = {};
-    this.onChangeInfo = this.onChangeInfo.bind(this);
-    this.onHoverIn = this.onHoverIn.bind(this);
-    this.onHoverOut = this.onHoverOut.bind(this);
-    this.removeTask = this.removeTask.bind(this);
-    this.handleUpdate = this.handleUpdate.bind(this);
-    this.detectIntros = this.detectIntros.bind(this);
-    this.highlightAll = this.highlightAll.bind(this);
+    // this.onChangeInfo = this.onChangeInfo.bind(this);
+    // this.onHoverIn = this.onHoverIn.bind(this);
+    // this.onHoverOut = this.onHoverOut.bind(this);
+    // this.removeTask = this.removeTask.bind(this);
+    // this.handleUpdate = this.handleUpdate.bind(this);
+    // this.detectIntros = this.detectIntros.bind(this);
+    // this.highlightAll = this.highlightAll.bind(this);
   }
 
   componentDidUpdate(){
@@ -39,11 +39,11 @@ class TodoItem extends Component {
     }
   }
 
-  onHoverIn = (e) => {
+  onHoverIn = () => {
     this.setState({showDelete: true})
   }
 
-  onHoverOut = (e) => {
+  onHoverOut = () => {
     this.setState({showDelete: false})
   }
 
@@ -56,7 +56,7 @@ class TodoItem extends Component {
     })
   }
 
-  onCompleted = (e) => {
+  onCompleted = () => {
     this.setState((prevState)=>(
       {...prevState, 
         todo:{...prevState.todo, 

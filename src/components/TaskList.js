@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
 import {GroupItem } from './GroupItem';
+import Navbar from './Navbar';
 import {dummy_data, gen_dummy_group} from '../utils/dummy_data';
 
 class TaskList extends Component {
   
   constructor(props){
     super(props);
-    this.state = {"loading":true, tmpData: gen_dummy_group(), group:null};
-    this.addNewTaskGroup = this.addNewTaskGroup.bind(this);
-    this.storeData = this.storeData.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.storeTmpData = this.storeTmpData.bind(this);
-    this.onSortEnd = this.onSortEnd.bind(this);
+    this.state = {"loading":true, 
+      tmpData: gen_dummy_group(),
+      groupFilters: {searchContent: ""}, 
+      group:null};
+    // this.addNewTaskGroup = this.addNewTaskGroup.bind(this);
+    // this.storeData = this.storeData.bind(this);
+    // this.onFocus = this.onFocus.bind(this);
+    // this.storeTmpData = this.storeTmpData.bind(this);
+    // this.onSortEnd = this.onSortEnd.bind(this);
     this.storage = {dev: "envWorkingHardOnTodos",
                     prod: "workingHardOnTodos"}
     this.storeType = process.env.REACT_APP_STAGE;
     this.storeLocation = this.storage[this.storeType];
+    // this.updateShowingGroups = this.updateShowingGroups.bind(this);
   }
   
   addNewTaskGroup = () => {
@@ -76,27 +81,46 @@ class TaskList extends Component {
     localStorage.setItem(this.storeLocation, stringNewState);
   }
 
-  onFocus() {
+  onFocus = () => {
     clearTimeout(this.timeOutId);
+  }
+
+  updateShowingGroups = (newFilters) =>{
+    this.setState({groupFilters: newFilters}, ()=>console.log(this.state.groupFilters))
+  }
+
+  filterGroups = (group) => {
+    let {searchContent} = this.state.groupFilters;
+    let containsText;
+    const strGroup = JSON.stringify(group).toLowerCase();
+    if (this.state.groupFilters.searchContent !== ""){
+      containsText = strGroup.includes(searchContent.toLowerCase())
+    } else {
+      containsText = true;
+    }
+    return containsText
   }
 
   render() {
     return (
       <div className="container">
+        <Navbar 
+          onChangeSearchParameters={this.updateShowingGroups}
+        />
         {this.state.loading && <div>Loading</div>} 
         {!this.state.loading && 
-          this.state.group.filter((e) => e.status > 0)
+        this.state.group
+          .filter(e => this.filterGroups(e))
           .map((e, idx)=>(
-            <GroupItem 
-              onDrop={this.onSortEnd}
-              index={idx}
-              key={e._id} 
-              sortBy="createdAt"
-              showChecked={true}
-              storeData={this.storeData}
-              group={e}/>
-          ))
-        }
+        <GroupItem 
+          onDrop={this.onSortEnd}
+          index={idx}
+          key={e._id} 
+          sortBy="createdAt"
+          showChecked={true}
+          storeData={this.storeData}
+          group={e}/>
+      ))}
         <GroupItem key="newTask"
           onBlur={this.addNewTaskGroup} 
           onFocus={this.onFocus}
