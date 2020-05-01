@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { FaTrash as MoreActions } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
-import { sortableElement } from 'react-sortable-hoc';
 import TodoItem from "./TodoItem";
 
 class GroupItem extends Component {
@@ -85,7 +84,7 @@ class GroupItem extends Component {
   }
 
   onTitleChange = (e) => {
-    const newTitle = e.currentTarget.value.trim();
+    const newTitle = e.currentTarget.value;
     if (newTitle.toLowerCase() !== "placeholder" 
       & newTitle !== null  
       & newTitle.toLowerCase() !== this.state.group.title
@@ -162,6 +161,6 @@ class GroupItem extends Component {
     );
   }
 }
-const SortableItem = sortableElement((props) => <><GroupItem {...props}/></>);
+// const SortableItem = sortableElement((props) => <><GroupItem {...props}/></>);
 // export default GroupItem;
-export {GroupItem, SortableItem};
+export {GroupItem};

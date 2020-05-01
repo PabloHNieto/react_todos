@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {GroupItem, SortableItem} from './GroupItem';
+import {GroupItem } from './GroupItem';
 import {dummy_data, gen_dummy_group} from '../utils/dummy_data';
 
 class TaskList extends Component {

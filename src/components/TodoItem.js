@@ -84,7 +84,7 @@ class TodoItem extends Component {
   }
   
   handleUpdate = (e) => {
-    const newName = e.currentTarget.value.trim();
+    const newName = e.currentTarget.value;
     this.setState((prevState)=>(
       {...prevState, 
         todo:{...prevState.todo, name:newName},
