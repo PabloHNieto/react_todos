@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import './Navbar.css';
 
 class Navbar extends Component {
   constructor(props){
@@ -20,7 +21,7 @@ class Navbar extends Component {
 
   render() {
     return (
-      <div>
+      <div className="navbar">
         <input className="search-content"
           onChange={this.handleChange}
           placeholder="Search content"

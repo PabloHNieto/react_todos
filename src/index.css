@@ -59,7 +59,9 @@ input:focus{
   column-count: 5;
   /* column-gap: 30px; */
   width: 95%;
-  margin: 1em;
+  /* margin: 1em; */
+  margin: 0 1em;
+  padding-top: 3em;
 }
 
 .group{

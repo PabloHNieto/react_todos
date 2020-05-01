@@ -1,0 +1,33 @@
+.navbar{
+  width: 100%;
+  height: 3em;
+  margin: 0;
+  background-color: rgba(255, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: fixed;
+  z-index: 10;
+}
+
+.search-content{
+  background-color: white;
+  height: 1.5em;
+  width: 30%;
+  text-align: center;
+  border-radius: 15px;
+  font-size: 1.2em;
+  color:black;
+  font-weight: bold;
+  box-shadow: 0.2rem 0.2rem 0.2rem #b13564;
+}
+
+.search-content::placeholder{
+  font-weight: bold;
+  color: darkgrey;
+  font-weight: lighter;
+}
+
+.search-content:focus{
+  box-shadow: 0.4rem 0.4rem 0.4rem #aa172b;
+}

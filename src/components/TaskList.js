@@ -103,31 +103,34 @@ class TaskList extends Component {
 
   render() {
     return (
-      <div className="container">
-        <Navbar 
+      <div>
+        <Navbar
           onChangeSearchParameters={this.updateShowingGroups}
         />
-        {this.state.loading && <div>Loading</div>} 
-        {!this.state.loading && 
-        this.state.group
-          .filter(e => this.filterGroups(e))
-          .map((e, idx)=>(
-        <GroupItem 
-          onDrop={this.onSortEnd}
-          index={idx}
-          key={e._id} 
-          sortBy="createdAt"
-          showChecked={true}
-          storeData={this.storeData}
-          group={e}/>
-      ))}
-        <GroupItem key="newTask"
-          onBlur={this.addNewTaskGroup} 
-          onFocus={this.onFocus}
-          showChecked={false}
-          sortBy="createdAt"
-          storeData={this.storeTmpData}
-          group={this.state.tmpData}/>
+        <div className="container">
+          {this.state.loading && <div>Loading</div>} 
+          {!this.state.loading && 
+          this.state.group
+            .filter(e => this.filterGroups(e))
+            .map((e, idx)=>(
+          <GroupItem 
+            onDrop={this.onSortEnd}
+            index={idx}
+            key={e._id} 
+            sortBy="createdAt"
+            showChecked={true}
+            storeData={this.storeData}
+            group={e}/>
+        ))}
+          <GroupItem key="newTask"
+            onBlur={this.addNewTaskGroup} 
+            onFocus={this.onFocus}
+            showChecked={false}
+            sortBy="createdAt"
+            storeData={this.storeTmpData}
+            group={this.state.tmpData}/>
+        </div>
+
       </div>
     );
   }
