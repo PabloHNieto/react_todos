@@ -8,6 +8,7 @@ class GroupItem extends Component {
   constructor(props){
     super(props);
     this.state = {autofocus:false,
+      showFilters: this.props.filterTask,
       idx: this.props.index,
       sortBy: this.props.sortBy,
       sortType: "asc",
@@ -17,7 +18,7 @@ class GroupItem extends Component {
   componentDidUpdate(prevProps, prevState){
     //Only update if there are changes
     if (JSON.stringify(prevState.group) !== JSON.stringify(this.state.group)){
-      this.props.storeData(this.state.group)
+      this.props.storeData(this.state.group);
     }
     if (this.props.group._id !== prevState.group._id){
       this.setState({group: this.props.group});
@@ -25,16 +26,21 @@ class GroupItem extends Component {
     if (this.props.index !== this.state.idx){
       this.setState({idx: this.props.index});
     }
+    
+    if (JSON.stringify(this.props.filterTask) 
+      !== JSON.stringify(prevProps.filterTask)){
+      this.setState({showFilters: this.props.filterTask});
+    }
   }
 
   changeFocus = () => {
     this.setState({autofocus: true});
   }
 
-  onArchive = (data) => {
+  onArchive = () => {
     this.setState((prevState)=>(
       {...prevState, 
-        group:{...prevState.group, status:0}
+        group:{...prevState.group, status:+!this.state.group.status}
       }) 
     );
   }
@@ -109,6 +115,16 @@ class GroupItem extends Component {
     this.props.onDrop(parseInt(e.dataTransfer.getData("idx")), this.state.idx)
   }
 
+  filter = (task) => {
+    try {
+      return this.props.filter(task, this.state.showFilters)
+    }
+    catch(err){
+      console.log(err);
+      return true
+    }
+  }
+
   render() {
     return (
       <div className={`group status-${this.state.group.status}`} 
@@ -133,7 +149,9 @@ class GroupItem extends Component {
         </div>
         <div className="group-body">
          {this.state.group.tasks.length >0 &&
-            this.state.group.tasks.map((e)=>(
+            this.state.group.tasks
+              .filter(e => this.filter(e))
+              .map((e)=>(
               <TodoItem
               key={e._id}
               changeFocus={this.changeFocus} 

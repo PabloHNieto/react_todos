@@ -8,8 +8,13 @@ class Navbar extends Component {
     this.showGroupOptions = [{value:-1, label: "all"}, 
                              {value: 0, label: "archived"}, 
                              {value: 1, label: "active"}];
+    this.showTaskOptions = [{value:-1, label: "all"}, 
+                             {value: 0, label: "completed"}, 
+                             {value: 1, label: "pending"}];
     this.state = {searchContent:'',
-                  showGroup: this.showGroupOptions[0]}
+                  showGroup: this.showGroupOptions[0],
+                  showTask: this.showTaskOptions[2]
+                }
     this.options = ['one', 'two', 'three'];
   }
 
@@ -32,6 +37,10 @@ class Navbar extends Component {
     this.setState({showGroup: value});
   }
 
+  showTaskOptionsChange = (value)=>{
+    this.setState({showTask: value});
+  }
+
   render() {
     return (
       <div className="navbar">
@@ -46,6 +55,15 @@ class Navbar extends Component {
             options={this.showGroupOptions} 
             value={this.state.showGroup.label}
             onChange={this.showGroupOptionsChange}
+            placeholder="Show Groups"/>
+        </label>
+        <label>Show Tasks
+          <Dropdown className='dropdown'
+            controlClassName='dropdownControl'
+            menuClassName='dropdownMenu'
+            options={this.showTaskOptions} 
+            value={this.state.showTask.label}
+            onChange={this.showTaskOptionsChange}
             placeholder="Show Groups"/>
         </label>
       </div>

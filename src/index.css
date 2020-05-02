@@ -112,20 +112,6 @@ input:focus{
   width: 80%;
 }
 
-/* .group-new{
-  border-radius: 10px;
-  max-height: 6em;
-  max-width: 6em;
-  margin-top: 2.5vh;
-  margin-left: 2.5vh;
-  background-color: var(--main-background-color);
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  cursor: pointer;
-} */
-
 .group:last-child >.group-body{
   background-color: #ccc;
   border-style: dashed;

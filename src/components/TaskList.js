@@ -9,7 +9,6 @@ class TaskList extends Component {
     super(props);
     this.state = {"loading":true, 
       tmpData: gen_dummy_group(),
-      groupFilters: {}, 
       group:null};
   
     this.storage = {dev: "envWorkingHardOnTodos",
@@ -96,11 +95,17 @@ class TaskList extends Component {
     let matchStatus;
     if (showGroup.value === -1) matchStatus = true;
     else matchStatus = group.status === showGroup.value; 
-    console.log(group.status)
     return containsText && matchStatus;
   }
 
+  filterTask = (task, {value}) => {
+    console.log(value, task)
+    if (value === -1) return true
+    else return task.completed === !value
+  }
+
   render() {
+    console.log(this.state.groupFilters)
     return (
       <div>
         <Navbar
@@ -112,14 +117,16 @@ class TaskList extends Component {
           this.state.group
             .filter(e => this.filterGroups(e))
             .map((e, idx)=>(
-          <GroupItem 
-            onDrop={this.onSortEnd}
-            index={idx}
-            key={e._id} 
-            sortBy="createdAt"
-            showChecked={true}
-            storeData={this.storeData}
-            group={e}/>
+            <GroupItem 
+              onDrop={this.onSortEnd}
+              index={idx}
+              key={e._id} 
+              sortBy="createdAt"
+              filter={this.filterTask}
+              filterTask={this.state.groupFilters.showTask}
+              showChecked={e.status}
+              storeData={this.storeData}
+              group={e}/>
         ))}
           <GroupItem key="newTask"
             onBlur={this.addNewTaskGroup} 
