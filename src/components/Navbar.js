@@ -60,9 +60,13 @@ class Navbar extends Component {
     this.setState({showMore: !this.state.showMore});
   }
 
+  hideMore = () => {
+    this.setState({showMore: false});
+  }
+
   render() {
     return (
-      <div className="navbar">
+      <div className="navbar" onMouseLeave={this.hideMore}>
         <div className="searchContainer">
           <input className="searchContent"
             onChange={this.handleChange}
@@ -72,13 +76,13 @@ class Navbar extends Component {
         { !this.state.showMore?
           <div 
             className="showMoreIcon"
-            onMouseEnter={this.showMore}>
+            onClick={this.showMore}>
             <BsPlusCircle />
           </div> 
           :
           <div 
             className="showMoreIcon"
-            onMouseEnter={this.showMore}>
+            onClick={this.showMore}>
             <BsDashCircle />
           </div> 
         }
