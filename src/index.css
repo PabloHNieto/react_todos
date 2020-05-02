@@ -22,6 +22,8 @@ input:focus{
   --border-size: 3px;
   --main-background-color: rgb(241, 44, 44);
   --light-background-color: lightpink;
+  --archive-background-color: green;
+  --archive-light-background-color: lightgreen;
 }
 
 .button-add{
@@ -71,6 +73,7 @@ input:focus{
   box-sizing: border-box;
 }
 
+
 .group-body{
   /* max-height: 30vh; */
   border: var(--border-size) solid black;
@@ -87,6 +90,19 @@ input:focus{
   border-radius: 10px 10px 0px 0px;
 }
 
+.status-0 > .group-header{
+  background-color: var(--archive-background-color);
+}
+
+.status-0 .todo-item{
+  background-color: var(--archive-light-background-color);
+}
+
+.status-0 .todo-item:hover{
+  background-color: var(--archive-background-color);
+}
+
+
 .group-header > input{
   white-space: nowrap; 
   overflow: hidden;
@@ -96,8 +112,7 @@ input:focus{
   width: 80%;
 }
 
-.group-new{
-  border:  var(--border-size) solid black; 
+/* .group-new{
   border-radius: 10px;
   max-height: 6em;
   max-width: 6em;
@@ -109,7 +124,7 @@ input:focus{
   flex-direction: column;
   justify-content: center;
   cursor: pointer;
-}
+} */
 
 .group:last-child >.group-body{
   background-color: #ccc;

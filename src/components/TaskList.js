@@ -96,6 +96,7 @@ class TaskList extends Component {
     let matchStatus;
     if (showGroup.value === -1) matchStatus = true;
     else matchStatus = group.status === showGroup.value; 
+    console.log(group.status)
     return containsText && matchStatus;
   }
 

@@ -47,7 +47,7 @@ label{
   background-color: rgba(255, 0, 0, 0.9);
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
   position: fixed;
   z-index: 10;
 }

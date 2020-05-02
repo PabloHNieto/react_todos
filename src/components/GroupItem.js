@@ -111,7 +111,7 @@ class GroupItem extends Component {
 
   render() {
     return (
-      <div className="group" 
+      <div className={`group status-${this.state.group.status}`} 
         draggable
         onDragStart={this.onDragStart} 
         onDrop={this.onDrop}
