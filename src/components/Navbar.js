@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Dropdown from 'react-dropdown';
+import { FaSortAmountDown, FaSortAmountUp} from 'react-icons/fa';
+import { BsPlusCircle, BsDashCircle } from 'react-icons/bs';
 import './Navbar.css';
 
 class Navbar extends Component {
@@ -11,9 +13,13 @@ class Navbar extends Component {
     this.showTaskOptions = [{value:-1, label: "all"}, 
                              {value: 0, label: "completed"}, 
                              {value: 1, label: "pending"}];
-    this.state = {searchContent:'',
+    this.sortTaskOptions = ["completedAt", "lastModified", "createdAt"];
+    this.state = {showMore: false,
+                  searchContent:'',
+                  sortType: 'asc',   
                   showGroup: this.showGroupOptions[0],
-                  showTask: this.showTaskOptions[2]
+                  showTask: this.showTaskOptions[0],
+                  sortTask: this.sortTaskOptions[2]
                 }
     this.options = ['one', 'two', 'three'];
   }
@@ -26,6 +32,11 @@ class Navbar extends Component {
     if (JSON.stringify(this.state) !== JSON.stringify(prevState)){
       this.props.onChangeSearchParameters(this.state);
     }
+  }
+
+  changeSortType = () => {
+    this.setState({sortType: 
+      this.state.sortType === "asc"? "desc": "asc"})
   }
 
   handleChange = (e) => {
@@ -41,31 +52,61 @@ class Navbar extends Component {
     this.setState({showTask: value});
   }
 
+  sortTaskOptionsChange = ({value})=>{
+    this.setState({sortTask: value});
+  }
+
+  showMore = () => {
+    this.setState({showMore: !this.state.showMore});
+  }
+
   render() {
     return (
       <div className="navbar">
-        <input className="searchContent"
-          onChange={this.handleChange}
-          placeholder="Search content"
-        /> 
-        <label>Show Groups
-          <Dropdown className='dropdown'
-            controlClassName='dropdownControl'
-            menuClassName='dropdownMenu'
-            options={this.showGroupOptions} 
-            value={this.state.showGroup.label}
-            onChange={this.showGroupOptionsChange}
-            placeholder="Show Groups"/>
-        </label>
-        <label>Show Tasks
-          <Dropdown className='dropdown'
-            controlClassName='dropdownControl'
-            menuClassName='dropdownMenu'
-            options={this.showTaskOptions} 
-            value={this.state.showTask.label}
-            onChange={this.showTaskOptionsChange}
-            placeholder="Show Groups"/>
-        </label>
+        <div className="searchContainer">
+          <input className="searchContent"
+            onChange={this.handleChange}
+            placeholder="Search content"
+          />
+        </div>
+        { !this.state.showMore?
+          <div 
+            className="showMoreIcon"
+            onMouseEnter={this.showMore}>
+            <BsPlusCircle />
+          </div> 
+          :
+          <div 
+            className="showMoreIcon"
+            onMouseEnter={this.showMore}>
+            <BsDashCircle />
+          </div> 
+        }
+          <div className={`menu ${!this.state.showMore && 'hideMenu'}`}>
+            <label>Show Groups
+              <Dropdown options={this.showGroupOptions} 
+                value={this.state.showGroup.label}
+                onChange={this.showGroupOptionsChange}
+                placeholder="Show Groups"/>
+            </label>
+            <label>Show Tasks
+              <Dropdown options={this.showTaskOptions}
+                value={this.state.showTask.label}
+                onChange={this.showTaskOptionsChange}
+                placeholder="Show Groups"/>
+            </label>
+            <label>Sort Tasks
+              <Dropdown options={this.sortTaskOptions} 
+                value={this.state.sortTask}
+                onChange={this.sortTaskOptionsChange}/>
+            </label>
+            <label className="icon"
+              onClick={this.changeSortType}>
+            {this.state.sortType === "asc"?
+              <FaSortAmountUp/> : <FaSortAmountDown/>  
+            }
+            </label>
+        </div> 
       </div>
     )
   }

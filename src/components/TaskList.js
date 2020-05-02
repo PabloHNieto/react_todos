@@ -92,20 +92,25 @@ class TaskList extends Component {
     } else {
       containsText = true;
     }
+
     let matchStatus;
+    
     if (showGroup.value === -1) matchStatus = true;
     else matchStatus = group.status === showGroup.value; 
     return containsText && matchStatus;
   }
 
   filterTask = (task, {value}) => {
-    console.log(value, task)
     if (value === -1) return true
     else return task.completed === !value
   }
 
+  sortTask = (task, nextTask, field, sortType) => {
+    if (sortType === "asc") return nextTask[field] - task[field]
+    return task[field] - nextTask[field]  
+  }
+
   render() {
-    console.log(this.state.groupFilters)
     return (
       <div>
         <Navbar
@@ -122,8 +127,9 @@ class TaskList extends Component {
               index={idx}
               key={e._id} 
               sortBy="createdAt"
+              sort={this.sortTask}
               filter={this.filterTask}
-              filterTask={this.state.groupFilters.showTask}
+              filterTask={this.state.groupFilters}
               showChecked={e.status}
               storeData={this.storeData}
               group={e}/>

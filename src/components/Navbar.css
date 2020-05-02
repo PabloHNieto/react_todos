@@ -1,18 +1,21 @@
 
 label{
-  font-weight: bold;
+  font-weight: 400;
+  display: inline-block;
+  margin-right: 20px;
 }
 
-.dropdown{
+.Dropdown-root{
   text-transform: capitalize;
   padding-left: 10px;
-  float: right;
+  display: inline-block;
 }
 
-.dropdownControl{
+.Dropdown-control{
   background-color: white;
   height: 1.5em;
-  width: 6em;
+  width: 7em;
+  padding-top: 5px;
   text-align: center;
   border-radius: 15px 15px 0 0;
   color:black;
@@ -21,9 +24,9 @@ label{
 }
 
 .Dropdown-option{
-  padding-top: 0.5em;
+  padding: 0.5em 0;
   background-color: #eee;
-  width: 6em;
+  width: 7em;
 }
 
 .Dropdown-option:hover{
@@ -31,7 +34,7 @@ label{
   background-color: lightpink;
 }
 
-.dropdownMenu{
+.Dropdown-menu{
   text-align: center;
   font-weight: 400;
   box-shadow: 0.2rem 0.2rem 0.2rem #b13564;
@@ -40,22 +43,57 @@ label{
   background-color: white;
 }
 
+.icon>svg{
+  cursor: pointer;
+  font-size: 1.2em;
+  position: absolute;
+  top:15px;
+}
+
+
+.menu{
+  transition: .5s;
+  position: absolute;
+  top: 3em;
+  height: 3em;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: inherit;
+}
+
+.hideMenu{
+  height: 0px;
+}
+
+.hideMenu>label{
+  height: 0px;
+  opacity: 0;
+  transition: 0.5;
+}
+
 .navbar{
   width: 100%;
   height: 3em;
   margin: 0;
   background-color: rgba(255, 0, 0, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
   position: fixed;
   z-index: 10;
+}
+
+.searchContainer{
+  position: absolute;
+  left: 35%;
+  height: 100%;
+  width: 25%;
+  display: flex;
+  align-items: center;
 }
 
 .searchContent{
   background-color: white;
   height: 1.5em;
-  width: 20%;
+  width: 100%;
   text-align: center;
   border-radius: 15px;
   font-size: 1.2em;
@@ -64,12 +102,36 @@ label{
   box-shadow: 0.2rem 0.2rem 0.2rem #b13564;
 }
 
-.search-content::placeholder{
-  font-weight: bold;
+.searchContent::placeholder{
   color: darkgrey;
   font-weight: lighter;
 }
 
-.search-content:focus{
+.searchContent:focus{
   box-shadow: 0.4rem 0.4rem 0.4rem #aa172b;
+}
+
+.showMoreIcon{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  opacity: 1;
+  font-size: 1.3em;
+  color: white;
+  position: absolute;
+  left: 62%;
+  height: 100%;
+}
+
+.showMoreIcon > svg{
+  font-size: 1.5em;
+  opacity: 0.4;
+}
+
+
+
+
+.showMoreIcon>svg:hover{
+  opacity: 1;
 }

@@ -8,7 +8,7 @@ class GroupItem extends Component {
   constructor(props){
     super(props);
     this.state = {autofocus:false,
-      showFilters: this.props.filterTask,
+      filters:{...this.props.filterTask},
       idx: this.props.index,
       sortBy: this.props.sortBy,
       sortType: "asc",
@@ -29,7 +29,7 @@ class GroupItem extends Component {
     
     if (JSON.stringify(this.props.filterTask) 
       !== JSON.stringify(prevProps.filterTask)){
-      this.setState({showFilters: this.props.filterTask});
+      this.setState({filters:{...this.props.filterTask}});
     }
   }
 
@@ -47,12 +47,11 @@ class GroupItem extends Component {
 
   onChangeInfo = (data, taskType) => {
     let tasks;
-    let didTasksChanged = false;
+
     if (taskType === "add"){
       const newTask = {_id:uuidv4(), createdAt: Date.now(), lastModified: Date.now(), 
         name: data.name, status: 1, completed:false};
       tasks = [...this.state.group.tasks, newTask];
-      didTasksChanged = true;
     } else if (taskType === "update"){
       console.log("Updating")
       tasks = this.state.group.tasks.map((t) => {
@@ -61,25 +60,15 @@ class GroupItem extends Component {
         }
         else {return t}
       });
-      didTasksChanged = true;
     } else if (taskType === "remove"){
       tasks = this.state.group.tasks.filter((t) => {
         return t._id !== data._id;
       })
-      didTasksChanged = true;
     }
 
-    if (didTasksChanged === true){
-      tasks = tasks.sort((a, b) => {
-        return b[this.state.sortBy] - a[this.state.sortBy] 
-      })
-
-      if(this.state.sortType === "asc"){tasks.reverse()}
-      console.log("settign states")
-      this.setState((prevState)=>(
-        {autofocus:false, group:{...prevState.group, tasks:tasks}}
-      ));
-    }
+    this.setState((prevState)=>(
+      {autofocus:false, group:{...prevState.group, tasks:tasks}}
+    ));
   }
 
   onTitleChange = (e) => {
@@ -105,6 +94,7 @@ class GroupItem extends Component {
       document.execCommand('selectAll', false, null)
     }, 0)
   }
+
   onDragStart = (e) => {
     console.log("DragStart", this.state.group.title, this.state.idx)
     e.dataTransfer.setData("idx", this.state.idx);
@@ -117,11 +107,24 @@ class GroupItem extends Component {
 
   filter = (task) => {
     try {
-      return this.props.filter(task, this.state.showFilters)
+      return this.props.filter(task, this.state.filters.showTask)
     }
     catch(err){
       console.log(err);
       return true
+    }
+  }
+
+  sort = (task, nextTask) => {
+    // console.log(task, nextTask)
+    try {
+      return this.props.sort(task, nextTask,
+         this.state.filters.sortTask,
+         this.state.filters.sortType);
+    }
+    catch(err){
+      console.log(err)
+      return 1
     }
   }
 
@@ -151,6 +154,7 @@ class GroupItem extends Component {
          {this.state.group.tasks.length >0 &&
             this.state.group.tasks
               .filter(e => this.filter(e))
+              .sort((task, nextTask) => this.sort(task, nextTask))
               .map((e)=>(
               <TodoItem
               key={e._id}
