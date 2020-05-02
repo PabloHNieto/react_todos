@@ -9,18 +9,13 @@ class TaskList extends Component {
     super(props);
     this.state = {"loading":true, 
       tmpData: gen_dummy_group(),
-      groupFilters: {searchContent: ""}, 
+      groupFilters: {}, 
       group:null};
-    // this.addNewTaskGroup = this.addNewTaskGroup.bind(this);
-    // this.storeData = this.storeData.bind(this);
-    // this.onFocus = this.onFocus.bind(this);
-    // this.storeTmpData = this.storeTmpData.bind(this);
-    // this.onSortEnd = this.onSortEnd.bind(this);
+  
     this.storage = {dev: "envWorkingHardOnTodos",
                     prod: "workingHardOnTodos"}
     this.storeType = process.env.REACT_APP_STAGE;
     this.storeLocation = this.storage[this.storeType];
-    // this.updateShowingGroups = this.updateShowingGroups.bind(this);
   }
   
   addNewTaskGroup = () => {
@@ -90,7 +85,7 @@ class TaskList extends Component {
   }
 
   filterGroups = (group) => {
-    let {searchContent} = this.state.groupFilters;
+    let {searchContent, showGroup} = this.state.groupFilters;
     let containsText;
     const strGroup = JSON.stringify(group).toLowerCase();
     if (this.state.groupFilters.searchContent !== ""){
@@ -98,7 +93,10 @@ class TaskList extends Component {
     } else {
       containsText = true;
     }
-    return containsText
+    let matchStatus;
+    if (showGroup.value === -1) matchStatus = true;
+    else matchStatus = group.status === showGroup.value; 
+    return containsText && matchStatus;
   }
 
   render() {

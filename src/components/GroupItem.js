@@ -12,14 +12,6 @@ class GroupItem extends Component {
       sortBy: this.props.sortBy,
       sortType: "asc",
       group: props.group};
-    // this.changeFocus = this.changeFocus.bind(this);
-    // this.onArchive = this.onArchive.bind(this);
-    // this.onChangeInfo = this.onChangeInfo.bind(this);
-    // this.onTitleChange = this.onTitleChange.bind(this);
-    // this.detectIntros = this.detectIntros.bind(this);
-    // this.highlightAll = this.highlightAll.bind(this);
-    // this.onDragStart = this.onDragStart.bind(this);
-    // this.onDrop = this.onDrop.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState){
