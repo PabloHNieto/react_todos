@@ -33,12 +33,19 @@ class TaskList extends Component {
     }
   }
 
+  componentDidUpdate(){
+    const newData = {groupFilters:this.state.groupFilters, group: this.state.group};
+    const stringNewState = JSON.stringify({...newData});
+
+    localStorage.setItem(this.storeLocation, stringNewState);
+  }
+
   storeTmpData = (data) => {
     this.setState({tmpData: data});
   }
 
   storeData = (data, taskType) => {
-    let newGroup;
+    let newGroup, newData;
 
     if (taskType === "newGroup"){
       newGroup = [...this.state.group, data];
@@ -53,14 +60,11 @@ class TaskList extends Component {
       return group.title.toLowerCase() !== "placeholder" && group.title !== null && group.title !== "";
     })
 
-    const stringNewState = JSON.stringify({group: newGroup});
-    localStorage.setItem(this.storeLocation, stringNewState);
-
-    this.setState({tmpData:gen_dummy_group(), group: newGroup})
+    newData = {groupFilters:this.state.groupFilters, group: newGroup};
+    this.setState({tmpData:gen_dummy_group(), ...newData});
   }
 
   onSortEnd = (oldIndex, newIndex) => {
-
     if (oldIndex === newIndex) return null
 
     let newGroup2 = this.state.group.slice()
@@ -70,9 +74,6 @@ class TaskList extends Component {
     newGroup.splice(oldIndex, 1)
     newGroup.splice(newIndex, 0, newGroup2[oldIndex])
     this.setState({group: newGroup});
-
-    const stringNewState = JSON.stringify({group: newGroup});
-    localStorage.setItem(this.storeLocation, stringNewState);
   }
 
   onFocus = () => {
@@ -80,13 +81,14 @@ class TaskList extends Component {
   }
 
   updateShowingGroups = (newFilters) =>{
-    this.setState({groupFilters: newFilters}, ()=>console.log(this.state.groupFilters))
+    this.setState({groupFilters: newFilters});
   }
 
   filterGroups = (group) => {
     let {searchContent, showGroup} = this.state.groupFilters;
     let containsText;
-    const strGroup = JSON.stringify(group).toLowerCase();
+    let strGroup = [group.title].concat(group.tasks.map((e)=>e.name))
+    strGroup = JSON.stringify(strGroup).toLowerCase();
     if (this.state.groupFilters.searchContent !== ""){
       containsText = strGroup.includes(searchContent.toLowerCase())
     } else {
@@ -102,7 +104,12 @@ class TaskList extends Component {
 
   filterTask = (task, {value}) => {
     if (value === -1) return true
-    else return task.completed === !value
+    if (value === 0) return task.completed === !value
+    else if (value === 1 && !task.completed) return true
+    else { //Returning recently completed tasks when filtering for Peding
+      let deltaCompleted = Math.floor((Date.now() - task.completedAt)/(1000*3600*24));
+      return deltaCompleted === 0;
+    }
   }
 
   sortTask = (task, nextTask, field, sortType) => {
@@ -114,6 +121,7 @@ class TaskList extends Component {
     return (
       <div>
         <Navbar
+          storeLocation={this.storeLocation}
           onChangeSearchParameters={this.updateShowingGroups}
         />
         <div className="container">

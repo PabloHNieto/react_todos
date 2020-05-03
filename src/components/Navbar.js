@@ -25,7 +25,25 @@ class Navbar extends Component {
   }
 
   componentDidMount(){
-    this.props.onChangeSearchParameters(this.state);
+    let storedData = localStorage.getItem(this.props.storeLocation);
+    storedData = JSON.parse(storedData).groupFilters;
+    let appliedFilters;
+
+    if (!storedData){
+      appliedFilters = {
+        searchContent: this.state.searchContent,
+        sortType: this.state.sortType,
+        showGroup: this.state.showGroup,
+        showTask: this.state.showTask,
+        sortTask: this.state.sortTask
+      } 
+    } else {
+      appliedFilters = {...storedData};
+    }
+
+    this.setState({...appliedFilters}, 
+      this.props.onChangeSearchParameters(appliedFilters)
+    );
   }
 
   componentDidUpdate(_, prevState){
