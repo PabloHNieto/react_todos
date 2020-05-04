@@ -4,7 +4,7 @@ import { FaTimes as RemoveIcon } from 'react-icons/fa';
 class TodoItem extends Component {
   constructor(props){
     super(props);
-    this.state = { showDelete:false, todo: props.todo};
+    this.state = { showDelete:false, showContextMenu:false, todo: props.todo};
     this.mainRef = createRef();
     this.tmpData = {};
   }
@@ -86,6 +86,10 @@ class TodoItem extends Component {
       })
     )
   }
+
+  showContextMenu = () => {
+    this.setState({showContextMenu: !this.state.showContextMenu});
+  }
   
   render() {
     const showDelete = this.state.showDelete && this.state.todo._id !== "newTask";
@@ -95,6 +99,7 @@ class TodoItem extends Component {
            onMouseOver={this.onHoverIn}
            onMouseLeave={this.onHoverOut}
            onMouseEnter={this.onHoverIn}
+           onContextMenu={this.showContextMenu}
            >
         {/* Checkbox with the status */}
         <label className={!this.props.showChecked ? "hide":undefined}>

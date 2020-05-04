@@ -34,6 +34,8 @@ input:focus{
 .button-delete{
   background-color: azure;
   border-left: 3px solid black;
+  border-radius: 0 5px 0 0;
+  font-size: 2em;
   cursor: pointer;
   display: inline;
   height: 100%;
@@ -47,8 +49,8 @@ input:focus{
 
 .button-delete > svg{
   position: absolute;
-  bottom: 10px;
-  right: 5px;
+  bottom: 5px;
+  right: -2.5px;
 }
 
 .button-small {

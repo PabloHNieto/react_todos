@@ -103,6 +103,7 @@ class TaskList extends Component {
   }
 
   filterTask = (task, {value}) => {
+    // -1 show all, 0 show completed, 1 show pending
     if (value === -1) return true
     if (value === 0) return task.completed === !value
     else if (value === 1 && !task.completed) return true

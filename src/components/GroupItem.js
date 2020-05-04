@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FaTrash as MoreActions } from 'react-icons/fa';
 import { FaEllipsisV as DragIcon } from 'react-icons/fa';
+import { TiArrowBack, TiDropbox } from "react-icons/ti";
 import { v4 as uuidv4 } from 'uuid';
 import TodoItem from "./TodoItem";
 
@@ -146,9 +147,14 @@ class GroupItem extends Component {
             onChange={this.onTitleChange} 
             onKeyDown={this.detectIntros}
             value={this.state.group.title}/>
-          <div className="button-delete" onClick={this.onArchive}>
-            <MoreActions />
-          </div> 
+            {this.state.group.status === 0?
+              <div className="button-delete" onClick={this.onArchive} title="Reactive">
+                <TiArrowBack/> 
+              </div> : 
+              <div className="button-delete" onClick={this.onArchive} title="Archive">
+                <TiDropbox/>
+              </div> 
+            }
         </div>
         <div className="group-body">
          {this.state.group.tasks.length >0 &&
