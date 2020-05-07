@@ -102,13 +102,15 @@ class TodoItem extends Component {
            onContextMenu={this.showContextMenu}
            >
         {/* Checkbox with the status */}
-        <label className={!this.props.showChecked ? "hide":undefined}>
-          <input type="checkbox" 
-            defaultChecked={this.state.todo.completed} 
-            onChange={this.onCompleted}
-            />  
-          <span className="check"></span>
-        </label>
+        { showDelete &&
+          <label className={!this.props.showChecked ? "hide":undefined}>
+            <input type="checkbox" 
+              defaultChecked={this.state.todo.completed} 
+              onChange={this.onCompleted}
+              />  
+            <span className="check"></span>
+          </label>
+        }
         <input
           className="todo-content"
           ref={this.mainRef}
