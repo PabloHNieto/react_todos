@@ -11,8 +11,11 @@ class Navbar extends Component {
                              {value: 0, label: "archived"}, 
                              {value: 1, label: "active"}];
     this.showTaskOptions = [{value:-1, label: "all"}, 
-                             {value: 0, label: "completed"}, 
-                             {value: 1, label: "pending"}];
+                            {value: 0, label: "pending"},
+                            {value: 1, label: "active"},
+                            {value: 2, label: "completed"}, 
+                            
+                            ];
     this.sortTaskOptions = ["completedAt", "lastModified", "createdAt"];
     this.state = {showMore: false,
                   searchContent:'',
@@ -26,7 +29,7 @@ class Navbar extends Component {
 
   componentDidMount(){
     let storedData = localStorage.getItem(this.props.storeLocation);
-    storedData = JSON.parse(storedData).groupFilters;
+    storedData = JSON.parse(storedData).metaData.groupFilters;
     let appliedFilters;
 
     if (!storedData){

@@ -50,12 +50,16 @@ class TodoItem extends Component {
   }
 
   onCompleted = () => {
-    const completedAt = this.state.todo.completed ? null : Date.now();
+    const statusIndex = (this.state.todo.status + 1) % Object.keys(this.props.statusHierarchy).length;
+    const statusLabel = this.props.statusHierarchy[statusIndex];
+    const completed = statusLabel === "completed";
+    const completedAt =  completed ? Date.now() : null;
     this.setState((prevState)=>(
       {...prevState, 
-        todo:{...prevState.todo, 
+        todo:{...prevState.todo,
+          status: statusIndex, 
           completedAt: completedAt,
-          completed: !prevState.todo.completed},
+          completed: completed},
       }), () => {this.props.onFocusOut(this.state.todo, "update") 
       }
     )
@@ -94,7 +98,7 @@ class TodoItem extends Component {
   render() {
     const showDelete = this.state.showDelete && this.state.todo._id !== "newTask";
     return (
-      <div className={`todo-item ${this.state.todo.completed && "disabled"}`} 
+      <div className={`todo-item status-${this.state.todo.status}`} 
            onFocus={() => {this.tmpData = this.state.todo}}
            onMouseOver={this.onHoverIn}
            onMouseLeave={this.onHoverOut}
@@ -102,13 +106,14 @@ class TodoItem extends Component {
            onContextMenu={this.showContextMenu}
            >
         {/* Checkbox with the status */}
-        { showDelete &&
+        { (showDelete && this.props.updatable) &&
           <label className={!this.props.showChecked ? "hide":undefined}>
             <input type="checkbox" 
               defaultChecked={this.state.todo.completed} 
               onChange={this.onCompleted}
               />  
             <span className="check"></span>
+            {/* <span className="statLabel">{this.props.statusHierarchy[this.state.todo.status]}</span> */}
           </label>
         }
         <input
@@ -121,9 +126,11 @@ class TodoItem extends Component {
           reset={this.props.reset}
           onBlur={this.onChangeInfo}
           value={this.state.todo.name}
-          disabled={this.state.todo.completed}
+          disabled={!this.props.updatable? true: false}
           type="text" />
-        { (showDelete && !this.state.todo.completed) &&
+        { (showDelete 
+            && this.props.updatable
+            && !this.state.todo.completed ) &&
           <RemoveIcon  
           onClick={this.removeTask}
           className="button-small" />

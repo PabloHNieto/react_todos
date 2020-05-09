@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FaTrash as MoreActions } from 'react-icons/fa';
 import { FaEllipsisV as DragIcon } from 'react-icons/fa';
 import { TiArrowBack, TiDropbox } from "react-icons/ti";
 import { v4 as uuidv4 } from 'uuid';
@@ -10,7 +9,6 @@ class GroupItem extends Component {
     super(props);
     this.state = {autofocus:false,
       filters:{...this.props.filterTask},
-      idx: this.props.index,
       sortBy: this.props.sortBy,
       sortType: "asc",
       group: props.group};
@@ -23,9 +21,6 @@ class GroupItem extends Component {
     }
     if (this.props.group._id !== prevState.group._id){
       this.setState({group: this.props.group});
-    }
-    if (this.props.index !== this.state.idx){
-      this.setState({idx: this.props.index});
     }
     
     if (JSON.stringify(this.props.filterTask) 
@@ -51,10 +46,10 @@ class GroupItem extends Component {
 
     if (taskType === "add"){
       const newTask = {_id:uuidv4(), createdAt: Date.now(), lastModified: Date.now(), 
-        name: data.name, status: 1, completed:false};
+        name: data.name, status: 0, completed:false};
       tasks = [...this.state.group.tasks, newTask];
     } else if (taskType === "update"){
-      console.log("Updating")
+      console.log("Updating", data)
       tasks = this.state.group.tasks.map((t) => {
         if (t._id === data._id) {
           return {...data, lastModified: Date.now()}
@@ -97,18 +92,18 @@ class GroupItem extends Component {
   }
 
   onDragStart = (e) => {
-    console.log("DragStart", this.state.group.title, this.state.idx)
-    e.dataTransfer.setData("idx", this.state.idx);
+    console.log("DragStart", this.state.group.title, this.state.group._id)
+    e.dataTransfer.setData("idx", this.state.group._id);
   }
 
   onDrop = (e) => {
     e.preventDefault();
-    this.props.onDrop(parseInt(e.dataTransfer.getData("idx")), this.state.idx)
+    this.props.onDrop(e.dataTransfer.getData("idx"), this.state.group._id)
   }
 
   filter = (task) => {
     try {
-      return this.props.filter(task, this.state.filters.showTask)
+      return this.props.filter(task, this.state.filters.showTask);
     }
     catch(err){
       console.log(err);
@@ -124,22 +119,22 @@ class GroupItem extends Component {
          this.state.filters.sortType);
     }
     catch(err){
-      console.log(err)
       return 1
     }
   }
 
   render() {
+    console.log(this.props.updatable)
     return (
       <div className={`group status-${this.state.group.status}`} 
-        draggable
+        draggable={this.props.sortable !== false}
         onDragStart={this.onDragStart} 
         onDrop={this.onDrop}
         onDragOver={e => e.preventDefault()}
         onFocus={this.props.onFocus}
         onBlur={this.props.onBlur}>
         <div className="group-header">
-          <DragIcon/>
+          {this.props.sortable !== false && <DragIcon/>}
           <input
             type="text" 
             onDragStart={e => e.preventDefault()}
@@ -163,16 +158,20 @@ class GroupItem extends Component {
               .sort((task, nextTask) => this.sort(task, nextTask))
               .map((e)=>(
               <TodoItem
-              key={e._id}
-              changeFocus={this.changeFocus} 
-              showChecked={this.props.showChecked} 
-              onFocusOut={this.onChangeInfo} 
-              todo={e}/>
-              ))
-            }
-          <TodoItem 
+                statusHierarchy={this.props.statusHierarchy}
+                key={e._id}
+                updatable={this.props.updatable}
+                changeFocus={this.changeFocus} 
+                showChecked={this.props.showChecked} 
+                onFocusOut={this.onChangeInfo} 
+                todo={e}
+                />
+                ))
+              }
+            <TodoItem 
             key={"newTask"}
             changeFocus={this.changeFocus}
+            updatable={this.props.updatable}
             autofocus={this.state.autofocus}
             showChecked={false} 
             reset="Placeholder"

@@ -92,17 +92,7 @@ input:focus{
   border-radius: 10px 10px 0px 0px;
 }
 
-.status-0 > .group-header{
-  background-color: var(--archive-background-color);
-}
 
-.status-0 .todo-item{
-  background-color: var(--archive-light-background-color);
-}
-
-.status-0 .todo-item:hover{
-  background-color: var(--archive-background-color);
-}
 
 
 .group-header > input{
@@ -210,13 +200,19 @@ input:focus{
   background-color: #eee;
 }
 
-.todo-item.disabled{
+.todo-item.status-2{
   background-color: rgba(100, 100, 100, 0.4);
   filter: blur(1px);
+  font-size: 0.9em;
   transition: 0.3s;
   border:0 solid white;
 }
 
+.todo-item.status-1>input{
+  font-size: 1.2em;
+  font-weight: bolder;
+  text-align: center;
+}
 
 .todo-item:last-child{
   background-color: rgba(100, 100, 100, 0.4);
@@ -233,7 +229,12 @@ input:focus{
   box-shadow: 3px 3px black;
   transition: 0.4s;
 }
-
+.statLabel{
+  background-color: blue;
+  position: relative;
+  top: -10px;
+  left: 30px;
+}
 div[contenteditable="true"]:focus{
   outline-width: 0;
 }
@@ -242,6 +243,18 @@ div[contenteditable="true"]:focus{
   font-weight: 100;
   transition: 0.4s;
   box-shadow: 1px 1px gray;
+}
+
+.status-0 > .group-header{
+  background-color: var(--archive-background-color);
+}
+
+.status-0 .todo-item{
+  background-color: var(--archive-light-background-color);
+}
+
+.status-0 .todo-item:hover{
+  background-color: var(--archive-background-color);
 }
 
 @media screen and (max-width: 1400px) {

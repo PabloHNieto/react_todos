@@ -8,6 +8,7 @@ class TaskList extends Component {
   constructor(props){
     super(props);
     this.state = {"loading":true, 
+      metaData:null,
       tmpData: gen_dummy_group(),
       group:null};
   
@@ -29,12 +30,14 @@ class TaskList extends Component {
     if (storedData === null){
       this.setState({...dummy_data, "loading":false});
     } else {
-      this.setState({...JSON.parse(storedData), "loading":false});
+      const newData = JSON.parse(storedData);
+      newData.metaData = {...newData.metaData, ...dummy_data._metadata};
+      this.setState({...newData, "loading":false}, ()=>{console.log(this.state)});
     }
   }
 
   componentDidUpdate(){
-    const newData = {groupFilters:this.state.groupFilters, group: this.state.group};
+    const newData = {metaData:this.state.metaData, group: this.state.group};
     const stringNewState = JSON.stringify({...newData});
 
     localStorage.setItem(this.storeLocation, stringNewState);
@@ -60,19 +63,22 @@ class TaskList extends Component {
       return group.title.toLowerCase() !== "placeholder" && group.title !== null && group.title !== "";
     })
 
-    newData = {groupFilters:this.state.groupFilters, group: newGroup};
+    //Modified hered metadata:{...this.state.metaData}, 
+    newData = {group: newGroup};
     this.setState({tmpData:gen_dummy_group(), ...newData});
   }
 
-  onSortEnd = (oldIndex, newIndex) => {
-    if (oldIndex === newIndex) return null
-
-    let newGroup2 = this.state.group.slice()
-      .filter((e) => e.status > 0);
-
-    let newGroup = newGroup2.slice();
-    newGroup.splice(oldIndex, 1)
-    newGroup.splice(newIndex, 0, newGroup2[oldIndex])
+  onSortEnd = (dragID, dropID) => {
+    // We move the dragID before the dropID
+    if (dragID === dropID) return null
+    
+    const dragIdx = this.state.group.findIndex( e => e._id === dragID);
+    const dropIdx = this.state.group.findIndex( e => e._id === dropID);
+    
+    let newGroup = this.state.group.slice();
+    const newGroup2 = this.state.group.slice();
+    newGroup.splice(dragIdx, 1)
+    newGroup.splice(dropIdx, 0, newGroup2[dragIdx])
     this.setState({group: newGroup});
   }
 
@@ -81,15 +87,16 @@ class TaskList extends Component {
   }
 
   updateShowingGroups = (newFilters) =>{
-    this.setState({groupFilters: newFilters});
+    const newMetaData = {...this.state.metaData, groupFilters: newFilters};
+    this.setState({metaData: newMetaData});
   }
 
   filterGroups = (group) => {
-    let {searchContent, showGroup} = this.state.groupFilters;
+    let {searchContent, showGroup} = this.state.metaData.groupFilters;
     let containsText;
     let strGroup = [group.title].concat(group.tasks.map((e)=>e.name))
     strGroup = JSON.stringify(strGroup).toLowerCase();
-    if (this.state.groupFilters.searchContent !== ""){
+    if (this.state.metaData.groupFilters.searchContent !== ""){
       containsText = strGroup.includes(searchContent.toLowerCase())
     } else {
       containsText = true;
@@ -102,14 +109,20 @@ class TaskList extends Component {
     return containsText && matchStatus;
   }
 
-  filterTask = (task, {value}) => {
+  filterTask = (task, filters) => {
     // -1 show all, 0 show completed, 1 show pending
-    if (value === -1) return true
-    if (value === 0) return task.completed === !value
-    else if (value === 1 && !task.completed) return true
+    let {searchContent} = this.state.metaData.groupFilters; 
+    //Placeholder for future exploration of how to do it
+    let containsText = task.name.toLowerCase()
+      .includes(searchContent.toLowerCase()) 
+    containsText = true;
+
+    if (filters.value === -1 && containsText) return true;
+    if (filters.value === task.status && containsText) return true;
+
     else { //Returning recently completed tasks when filtering for Peding
       let deltaCompleted = Math.floor((Date.now() - task.completedAt)/(1000*3600*24));
-      return deltaCompleted === 0;
+      return deltaCompleted === 0 && containsText;
     }
   }
 
@@ -130,15 +143,16 @@ class TaskList extends Component {
           {!this.state.loading && 
           this.state.group
             .filter(e => this.filterGroups(e))
-            .map((e, idx)=>(
+            .map((e)=>(
             <GroupItem 
               onDrop={this.onSortEnd}
-              index={idx}
-              key={e._id} 
+              key={e._id}
+              statusHierarchy={this.state.metaData.taskStatusesCorrespondece} 
               sortBy="createdAt"
+              updatable={!(e.status===0)}
               sort={this.sortTask}
               filter={this.filterTask}
-              filterTask={this.state.groupFilters}
+              filterTask={this.state.metaData.groupFilters}
               showChecked={e.status}
               storeData={this.storeData}
               group={e}/>
@@ -148,6 +162,8 @@ class TaskList extends Component {
             onFocus={this.onFocus}
             showChecked={false}
             sortBy="createdAt"
+            sortable={false}
+            updatable={true}
             storeData={this.storeTmpData}
             group={this.state.tmpData}/>
         </div>

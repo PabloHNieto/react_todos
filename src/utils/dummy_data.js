@@ -1,11 +1,18 @@
 import { v4 as uuidv4 } from 'uuid';
 
 const dummy_data = {
-  _metadata:{statusCorresponde:{
-    0:"archive", 
-    1:"completed",
-    2:"pending"
-  }},
+  _metadata:{
+    statusCorresponde:{
+      0:"archive", 
+      1:"completed",
+      2:"pending"
+    },
+    taskStatusesCorrespondece:{
+      0:"pending", 
+      1:"active",
+      2:"completed"
+    }
+  },
   group:[
     {
       _id: uuidv4(),
@@ -19,14 +26,14 @@ const dummy_data = {
           name: "First Thing",
           completed: false,
           lastModified: Date.now(),
-          status: 1,
+          status: 0,
         },
         {
           _id: uuidv4(),
           createdAt: Date.now(),
           lastModified: Date.now(),
           name: "Second Thing",
-          status: 1,
+          status: 0,
           completed: false
         },
         {
@@ -49,7 +56,7 @@ const dummy_data = {
           createdAt: Date.now(),
           lastModified: Date.now(),
           name: "First Thing",
-          status: 1,
+          status: 2,
           completed: false
         },
         {
@@ -65,7 +72,7 @@ const dummy_data = {
           createdAt: Date.now(),
           lastModified: Date.now(),
           name: "Thrid Thing",
-          status: 1,
+          status: 0,
           completed: true
         },
       ]
